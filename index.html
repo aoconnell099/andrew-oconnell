@@ -203,10 +203,9 @@
             //third-person camera
             var camera = new BABYLON.ArcRotateCamera("camera1", -Math.PI/3, (Math.PI/2)-0.2, 8, new BABYLON.Vector3(0, 0, 0), scene); //y =8
             camera.upperBetaLimit = Math.PI/2; // stops camera from going through the ground
+            camera.upperRadiusLimit = 20;
+            camera.pinchPrecision = 10;
             
-            if ((typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1)){
-                camera.radius = 20;
-            }
             console.log(camera.radius);
             scene.activeCamera = camera;
             scene.activeCamera.attachControl(canvas, true);
@@ -275,6 +274,28 @@
                 }
 
                 mesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnLeftPickTrigger, function(){
+                    switch (mesh.name) {
+                    case "disc":
+                    case "github_logo":
+                        window.open(githubURL);
+                        break;
+                    case "gmail_logo":
+                        window.open(gmailURL);
+                        break;
+                    case "resume_logo":
+                        window.open(resumeURL);
+                        break;
+                    case "deadpool_logo":
+                        window.open(deadpoolURL);
+                    case "facebook_logo":
+                        window.open(fbURL);
+                        break;
+                    case "aiWaterworks":
+                        window.open(aiURL);
+                        break;
+                    }
+                }));
+                mesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickUpTrigger, function(){
                     switch (mesh.name) {
                     case "disc":
                     case "github_logo":
