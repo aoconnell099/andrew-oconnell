@@ -201,11 +201,13 @@
             disc.visibility = 0;
 
             //third-person camera
-            var camera = new BABYLON.ArcRotateCamera("camera1", -Math.PI/3, (Math.PI/2)-0.2, 8, new BABYLON.Vector3(0, 0, 0), scene); //y =8
+            var camera = new BABYLON.ArcRotateCamera("camera1", (-Math.PI/2.8), (Math.PI/2)-0.2, 12, new BABYLON.Vector3(0, 0, 0), scene); //y =8
             camera.upperBetaLimit = Math.PI/2; // stops camera from going through the ground
             camera.lowerRadiusLimit = 1;
             camera.upperRadiusLimit = 20;
             camera.pinchPrecision = 90;
+            camera.angularSensibilityX = 1000;
+            camera.angularSensibilityY = 1000;
             
             console.log(camera.radius);
             scene.activeCamera = camera;
