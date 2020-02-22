@@ -1,0 +1,318 @@
+<!doctype html>
+<html>
+<head>
+    <title>.babylon animations</title>
+    <meta charset="UTF-8">
+    <!-- this link to the preview online version of BJS -->
+    <script src="https://preview.babylonjs.com/babylon.js"></script>
+    <!-- this is needed for BJS to load scene files -->
+    <script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.js"></script>
+    <!-- this is needed for cannon physics engine -->
+    <script src="https://cdn.babylonjs.com/cannon.js"></script>
+    <!-- this is needed for the starfield procedural texture -->
+    <script src="https://cdn.babylonjs.com/proceduralTexturesLibrary/babylonjs.proceduralTextures.min.js"></script>
+    
+    <style>
+        html, body {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: OpenSans, tahoma, arial, sans-serif;
+            color:white;
+        }
+
+        #canvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas"></canvas>
+    <script type="text/javascript">
+        var canvas = document.getElementById("canvas");
+        var engine = new BABYLON.Engine(canvas, true);
+
+        // first, we create our scene with the static objects http://doc.babylonjs.com/api/classes/babylon.sceneloader#load
+        BABYLON.SceneLoader.Load("", "newLogosOriented.babylon", engine, function (scene) { //01.master-static-scene
+            var gravityVector = new BABYLON.Vector3(0,-9.81, 0);
+            var physicsPlugin = new BABYLON.CannonJSPlugin();
+            scene.enablePhysics(gravityVector, physicsPlugin);
+            var physicsViewer = new BABYLON.Debug.PhysicsViewer();
+            var physicsHelper = new BABYLON.PhysicsHelper(scene);
+
+            scene.getLightByName("Light").intensity = 0;
+            
+            var github;
+            var githubURL = "https://github.com/aoconnell099";
+            var gmail;
+            var gmailURL = "mailto: aoconnell099@gmail.com"
+            var resume;
+            var resumeURL = "./Andrew_OConnell_Resume.pdf";
+            var deadpool;
+            var deadpoolURL = "https://aoconnell099.github.io/deadpool/build/index.html";
+            var fb;
+            var fbURL = "https://www.facebook.com/andrew.oconnell.98";
+
+            //var disc = BABYLON.MeshBuilder.CreateDisc("disc", {radius: 8}, scene); 
+            var disc = BABYLON.MeshBuilder.CreateCylinder("disc", {height: 0.1, diameter: 1.6}, scene); 
+            //disc.scaling = new BABYLON.Vector3(0.1,0.1,0.1);
+
+            scene.meshes.forEach((mesh) => {
+                mesh.position = new BABYLON.Vector3(mesh.position.x*0.1, mesh.position.y*0.1, mesh.position.z*0.05);
+                mesh.position.x += 2;
+                // mesh.position.y += 0.4;
+                //.position.z += 15;
+                mesh.renderingGroupId = 3;
+                switch (mesh.name) {
+                    case "github_logo":
+                        github = mesh;
+                        github.scaling = new BABYLON.Vector3(0.1,0.1,0.1);
+                        break;
+                    case "gmail_logo":
+                        gmail = mesh;
+                        gmail.scaling = new BABYLON.Vector3(0.1,1,0.1);
+                        break;
+                    case "resume_logo":
+                        resume = mesh;
+                        resume.scaling = new BABYLON.Vector3(0.2,1,0.2);
+                        break;
+                    case "deadpool_logo":
+                        deadpool = mesh;
+                        deadpool.scaling = new BABYLON.Vector3(0.1,1,0.1);
+                        break;
+                    case "facebook_logo":
+                        fb = mesh;
+                        fb.scaling = new BABYLON.Vector3(0.1,1,0.1);
+                        break;
+                }
+                mesh.actionManager = new BABYLON.ActionManager(scene);
+            });
+            //disc.position = github.position;
+            disc.position = new BABYLON.Vector3(1.975, 0, -0.5)
+            disc.rotation = github.rotation;
+            disc.visibility = 0;
+            //disc.actionManager = new BABYLON.ActionManager(scene);
+
+            //third-person camera
+            var camera = new BABYLON.ArcRotateCamera("camera1", -Math.PI/3, (Math.PI/2)-0.2, 8, new BABYLON.Vector3(0, 0, 0), scene); //y =8
+            camera.upperBetaLimit = Math.PI/2; // stops camera from going through the ground
+            //first-person camera
+            //var camera2 = new BABYLON.FreeCamera("camera2", new BABYLON.Vector3(0, 0, -50), scene);
+            scene.activeCamera = camera;
+            scene.activeCamera.attachControl(canvas, true);
+            // camera.lowerRadiusLimit = 2;
+            // camera.upperRadiusLimit = 10;
+            // camera.wheelDeltaPercentage = 0.01;	
+
+            var isGithub = false;         
+            var isGmail = false;
+            var isResume = false;
+            var isDeadpool = false;
+            var isFacebook = false;
+            // Over/Out
+            var makeOverOut = function (mesh) {
+                // mesh.actionManager.registerAction(new BABYLON.InterpolateValueAction(BABYLON.ActionManager.OnPointerOutTrigger, mesh, "rotation", new BABYLON.Vector3(mesh.rotation.x, mesh.rotation.y+=0.005, mesh.rotation.z)));
+                // mesh.actionManager.registerAction(new BABYLON.InterpolateValueAction(BABYLON.ActionManager.OnPointerOverTrigger, mesh, "rotation", new BABYLON.Vector3(mesh.rotation.x, mesh.rotation.y+=0.01, mesh.rotation.z)));
+                mesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, function(){
+                    switch (mesh.name) {
+                    case "disc":
+                    case "github_logo":
+                        isGithub = false;
+                        break;
+                    case "gmail_logo":
+                        isGmail = false;
+                        break;
+                    case "resume_logo":
+                        isResume = false;
+                        break;
+                    case "deadpool_logo":
+                        isDeadpool = false;
+                        break;
+                    case "facebook_logo":
+                        isFacebook = false;
+                        break;
+                    }
+                }));
+                mesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, function(){
+                    switch (mesh.name) {
+                    case "disc":
+                    case "github_logo":
+                        isGithub = true;
+                        break;
+                    case "gmail_logo":
+                        isGmail = true;
+                        break;
+                    case "resume_logo":
+                        isResume = true;
+                        break;
+                    case "deadpool_logo":
+                        isDeadpool = true;
+                        break;
+                    case "facebook_logo":
+                        isFacebook = true;
+                        break;
+                    }
+                }));
+                if (mesh.name == "disc") {
+                    mesh.actionManager.registerAction(new BABYLON.InterpolateValueAction(BABYLON.ActionManager.OnPointerOutTrigger, github, "position", new BABYLON.Vector3(github.position.x, github.position.y, github.position.z), 150));
+                    mesh.actionManager.registerAction(new BABYLON.InterpolateValueAction(BABYLON.ActionManager.OnPointerOverTrigger, github, "position", new BABYLON.Vector3(github.position.x, github.position.y+0.1, github.position.z), 150));    
+                }
+                else {
+                    mesh.actionManager.registerAction(new BABYLON.InterpolateValueAction(BABYLON.ActionManager.OnPointerOutTrigger, mesh, "position", new BABYLON.Vector3(mesh.position.x, mesh.position.y, mesh.position.z), 150));
+                    mesh.actionManager.registerAction(new BABYLON.InterpolateValueAction(BABYLON.ActionManager.OnPointerOverTrigger, mesh, "position", new BABYLON.Vector3(mesh.position.x, mesh.position.y+0.1, mesh.position.z), 150));
+                }
+
+                mesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnLeftPickTrigger, function(){
+                    switch (mesh.name) {
+                    case "disc":
+                    case "github_logo":
+                        window.open(githubURL);
+                        break;
+                    case "gmail_logo":
+                        window.open(gmailURL);
+                        break;
+                    case "resume_logo":
+                        window.open(resumeURL);
+                        break;
+                    case "deadpool_logo":
+                        window.open(deadpoolURL);
+                    case "facebook_logo":
+                        window.open(fbURL);
+                        break;
+                    }
+                }));
+            }
+
+            makeOverOut(github);
+            makeOverOut(disc);
+            makeOverOut(gmail);
+            makeOverOut(resume);
+            makeOverOut(deadpool);
+            makeOverOut(fb);
+
+            var rotSpeed = 0.005;
+            scene.onBeforeRenderObservable.add(()=>{
+                if(isGithub) {
+                    github.rotation.y += rotSpeed*2; 
+                }
+                else {
+                    github.rotation.y += rotSpeed;
+                }
+                disc.rotation = github.rotation;
+                if(isGmail) {
+                    gmail.rotation.y += rotSpeed*2; 
+                }
+                else {
+                    gmail.rotation.y += rotSpeed;
+                }
+                if(isResume) {
+                    resume.rotation.y += rotSpeed*2; 
+                }
+                else {
+                    resume.rotation.y += rotSpeed;
+                }
+                if(isDeadpool) {
+                    deadpool.rotation.y += rotSpeed*2; 
+                }
+                else {
+                    deadpool.rotation.y += rotSpeed;
+                }
+                if(isFacebook) {
+                    fb.rotation.y += rotSpeed*2; 
+                }
+                else {
+                    fb.rotation.y += rotSpeed;
+                }
+            });
+            
+
+            // var helper = scene.createDefaultEnvironment({
+            //     enableGroundMirror: true,
+            //     groundShadowLevel: 0.6,
+            // });       
+            // helper.scaling = new BABYLON.Vector3(3, 3, 3)
+            // //helper.ground = ground1;
+            // helper.setMainColor(BABYLON.Color3.Black());
+
+            // var ground = new BABYLON.MeshBuilder.CreateGround("ground", 20, 20, 1, scene);
+            // ground.
+
+            // var starFieldHemisphericLight = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(0, 0.5, 0), scene);
+
+            // BABYLON.ParticleHelper.BaseAssetsUrl = "./";
+
+            // var myParticleSet = new BABYLON.ParticleHelper.CreateAsync("sunMed", scene).then(function(set) {
+            //     console.log(set);
+            //     set.emitterNode.position = new BABYLON.Vector3(-4.5, 0.5, 3);
+            //     starFieldHemisphericLight.excludedMeshes.push(set.emitterNode);
+            //     // set.scaling = new BABYLON.Vector3(20,20,20);
+            //     set.start();
+            // });
+            //myParticleSet.position = new BABYLON.Vector3(-10, 0, 30);
+
+            
+
+            // var spaceScale = 10;
+            // var space = BABYLON.Mesh.CreateCylinder("space", 10 * spaceScale, 0, 6 * spaceScale, 20, 20, scene);
+            // space.position.x -=6;
+            // space.position.y -=5;
+            // space.rotation = new BABYLON.Vector3(Math.PI/2, -Math.PI/6, 0); //(90, 240 or -120 // -Math.PI/6, 320 or )
+
+            // var starfieldPT = new BABYLON.StarfieldProceduralTexture("starfieldPT", 512, scene); //512
+            // var starfieldMaterial = new BABYLON.StandardMaterial("starfield", scene);
+            // starfieldMaterial.diffuseTexture = starfieldPT;
+            // starfieldMaterial.diffuseTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+            // starfieldMaterial.backFaceCulling = false;
+            // starfieldPT.beta = 0.1;
+
+            // space.material = starfieldMaterial;
+
+            // scene.registerBeforeRender(function () {
+            //     //console.log(starfieldPT.time);
+            //     starfieldPT.time += scene.getAnimationRatio() * 0.8;
+            // });
+            // // scene.onBeforeRenderObservable.add(() => {
+            // //     starfieldPT.time += scene.getAnimationRatio() * 0.8;
+            // // });
+
+
+            var hemisphericLight = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(0, 0.5, 0), scene);
+
+            var spaceScale = 10.0;
+            var space = BABYLON.Mesh.CreateCylinder("space", 10 * spaceScale, 0, 6 * spaceScale, 20, 20, scene);
+
+            var starfieldPT = new BABYLON.StarfieldProceduralTexture("starfieldPT", 512, scene);
+            var starfieldMaterial = new BABYLON.StandardMaterial("starfield", scene);
+            starfieldMaterial.diffuseTexture = starfieldPT;
+            starfieldMaterial.diffuseTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+            starfieldMaterial.backFaceCulling = false;
+            starfieldPT.beta = 0.1;
+
+            space.material = starfieldMaterial;
+
+            scene.registerBeforeRender(function () {
+                starfieldPT.time += scene.getAnimationRatio() * 0.8;
+            });
+
+
+            // this show the inspector, uncomment to use it
+            scene.debugLayer.show({
+                embedMode: true
+            });
+
+            engine.runRenderLoop(function() {
+                scene.render();
+            });
+
+            window.addEventListener("resize", function () {
+                engine.resize();
+            });
+        });
+    </script>
+</body>
+</html>

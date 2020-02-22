@@ -1,0 +1,93 @@
+Exporter version: 6.2.4, Blender version: 2.81 (sub 16)
+========= Conversion from Blender to Babylon.js =========
+	Scene settings used :
+		inline textures     :  false
+		Material Type       :  PBR
+		Positions Precision :  4
+		Normals Precision   :  3
+		UVs Precision       :  3
+		Vert Color Precision:  3
+		Mat Weight Precision:  2
+		texture directory   :  C:\xampp\htdocs\babylonScenes\portfolio\
+	Python World class constructor completed
+	processing begun of camera (UniversalCamera):  Camera
+	processing begun of mesh:  github_logo
+		processing begun of material:  Material.001
+		num positions      :  1424
+		num normals        :  1424
+		num tangents       :  0
+		num uvs            :  0
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  2124
+	processing begun of mesh:  deadpool_logo
+		processing begun of material:  palette
+			processing texture deadpool
+				texture type:  diffuseTexture, mapped using: "UVMap"
+		Custom split normals with tangents being used
+		num positions      :  10562
+		num normals        :  10562
+		num tangents       :  42248
+		num uvs            :  21124
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  14532
+	processing begun of mesh:  facebook_logo
+		processing begun of material:  palette.001
+			processing texture facebook
+				texture type:  diffuseTexture, mapped using: "UVMap"
+		Custom split normals with tangents being used
+		num positions      :  1529
+		num normals        :  1529
+		num tangents       :  6116
+		num uvs            :  3058
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  2256
+	processing begun of mesh:  gmail_logo
+		processing begun of material:  palette.002
+			processing texture gmailLogo
+				texture type:  diffuseTexture, mapped using: "UVMap"
+		Custom split normals with tangents being used
+		num positions      :  5881
+		num normals        :  5881
+		num tangents       :  23524
+		num uvs            :  11762
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  9660
+	processing begun of mesh:  resume_logo
+		processing begun of material:  palette.003
+			processing texture resume
+				texture type:  diffuseTexture, mapped using: "UVMap"
+		Custom split normals with tangents being used
+		num positions      :  4908
+		num normals        :  4908
+		num tangents       :  19632
+		num uvs            :  9816
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  7380
+	processing begun of mesh:  aiWaterworks
+		processing begun of material:  palette.004
+			processing texture aiWaterworks
+				texture type:  diffuseTexture, mapped using: "UVMap"
+		Custom split normals with tangents being used
+		num positions      :  69550
+		num normals        :  69550
+		num tangents       :  278200
+		num uvs            :  139100
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  96648
+	processing begun of light (POINT):  Light
+========= Writing of JSON file started =========
+	writing mesh:  github_logo
+	writing mesh:  deadpool_logo
+	writing mesh:  facebook_logo
+	writing mesh:  gmail_logo
+	writing mesh:  resume_logo
+	writing mesh:  aiWaterworks
+========= Writing of JSON file completed =========
+========= end of processing =========
+elapsed time:  0 min, 15.0723 secs

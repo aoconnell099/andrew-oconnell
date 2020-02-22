@@ -1,0 +1,418 @@
+<!doctype html>
+<html>
+<head>
+    <title>Welcome | Andrew O'Connell</title>
+    <meta charset="UTF-8">
+    <!-- this link to the preview online version of BJS -->
+    <script src="https://preview.babylonjs.com/babylon.js"></script>
+    <!-- this is needed for BJS to load scene files -->
+    <script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.js"></script>
+    <!-- this is needed for cannon physics engine -->
+    <script src="https://cdn.babylonjs.com/cannon.js"></script>
+    <!-- this is needed for the starfield procedural texture -->
+    <script src="https://cdn.babylonjs.com/proceduralTexturesLibrary/babylonjs.proceduralTextures.min.js"></script>
+    <script src="https://preview.babylonjs.com/gui/babylon.gui.min.js"></script>
+
+    <!-- Favicon Blue -->
+    <!-- <link rel="apple-touch-icon" sizes="180x180" href="./faviconBlue/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./faviconBlue/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./faviconBlue/favicon-16x16.png">
+    <link rel="manifest" href="./faviconBlue/site.webmanifest"> -->
+
+    <!-- Favicon Black -->
+    <!-- <link rel="apple-touch-icon" sizes="180x180" href="./faviconBlack/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./faviconBlack/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./faviconBlack/favicon-16x16.png">
+    <link rel="manifest" href="./faviconBlack/site.webmanifest"> -->
+
+    <!-- Favicon Green -->
+    <link rel="apple-touch-icon" sizes="180x180" href="./faviconGreen/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./faviconGreen/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./faviconGreen/favicon-16x16.png">
+    <link rel="manifest" href="./faviconGreen/site.webmanifest">
+
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800">
+    <!-- CSS Global Compulsory -->
+    <link rel="stylesheet" href="./assets/vendor/bootstrap/bootstrap.min.css">
+    <!-- CSS Global Icons -->
+    <link rel="stylesheet" href="./assets/vendor/icon-line-pro/style.css">
+
+    <!-- CSS Unify -->
+    <link rel="stylesheet" href="./assets/css/unify-core.css">
+    <link rel="stylesheet" href="./assets/css/unify-components.css">
+    <link rel="stylesheet" href="./assets/css/unify-globals.css">
+
+    <!-- CSS Customization -->
+    <link rel="stylesheet" href="./assets/css/custom.css">
+    
+    <style>
+        html, body {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: OpenSans, tahoma, arial, sans-serif;
+            color:white;
+        }
+
+        #canvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+
+        #canvas-wrap { 
+            width: 100%;
+            height: 100%;
+            position:relative 
+        } /* Make this a positioned parent */
+        
+        #overlay { 
+            position:absolute; 
+            top:20px; 
+            left:30px; 
+        }
+        
+    </style>
+</head>
+
+<body>
+    <div id="canvas-wrap">
+        <canvas id="canvas"></canvas>
+        <div id="overlay">
+            <!-- Team Block -->
+            <div class="row">
+                <div> <!--class="col-md-4 g-mb-30"-->
+                <!-- Figure -->
+                <figure class="u-shadow-v21 u-shadow-v21--hover g-bg-transparent g-rounded-4 text-center g-transition-0_3">
+                    <div class="g-py-10 g-px-20">
+                        <!-- Figure Image -->
+                        <img class="g-width-130 g-height-130 rounded-circle g-mb-30" src="./assets/img-temp/125x125/img14.png" alt="Image Description">
+                        <!-- Figure Image -->
+                
+                        <!-- Figure Info -->
+                        <h4 class="h5 g-font-weight-700 g-mb-15">Andrew O'Connell</h4>
+                        <ul class="list-unstyled">
+                            <li class="d-block g-color-gray-dark-v5 g-font-size-13 mb-1">
+                            <i class="align-middle mr-2 icon-communication-062 u-line-icon-pro"></i>
+                            aoconnell099@gmail.com
+                            </li>
+                            <li class="d-block g-color-gray-dark-v5 g-font-size-13 mb-1">
+                            <i class="align-middle mr-2 icon-communication-006 u-line-icon-pro"></i>
+                            (630) 917-9099
+                            </li>
+                            
+                            <li class="d-block g-color-gray-dark-v5 g-font-size-13">
+                            <i class="align-middle mr-2 icon-hotel-restaurant-235 u-line-icon-pro"></i>
+                            Chicago, Illinois
+                            </li>
+                        </ul>
+                        
+                        <hr class="w-27 g-my-15" style="border: 1px solid grey;
+                        border-radius: 5px;">
+                        <p class= "g-theme-color-gray-light-v2  g-font-size-14">
+                                Hello! Thanks for stopping by!  
+                            <br>
+                            <br> If you would like to get in  
+                            <br> touch, check out some of my
+                            <br> work, or just want to get to
+                            <br> know me, click on any of the 
+                            <br> icons to get started. If you 
+                            <br> have any feedback or would
+                            <br> like to collaborate please 
+                            <br> don't hesitate to reach out!
+                        </p>
+                          
+                    <!-- End Figure Info -->
+                    </div>
+                </figure>
+                <!-- End Figure -->
+                </div>  
+            </div>
+        </div>
+    </div>
+    
+    <script type="text/javascript">
+        var canvas = document.getElementById("canvas");
+        var engine = new BABYLON.Engine(canvas, true);
+
+        BABYLON.SceneLoader.Load("", "logosRotos.babylon", engine, function (scene) { 
+            var gravityVector = new BABYLON.Vector3(0,-9.81, 0);
+            var physicsPlugin = new BABYLON.CannonJSPlugin();
+            scene.enablePhysics(gravityVector, physicsPlugin);
+            var physicsViewer = new BABYLON.Debug.PhysicsViewer();
+            var physicsHelper = new BABYLON.PhysicsHelper(scene);
+
+            scene.getLightByName("Light").dispose();
+            
+            var github;
+            var githubURL = "https://github.com/aoconnell099";
+            var gmail;
+            var gmailURL = "mailto: aoconnell099@gmail.com"
+            var resume;
+            var resumeURL = "./Andrew_OConnell_Resume.pdf";
+            var deadpool;
+            var deadpoolURL = "https://aoconnell099.github.io/deadpool/build/index.html";
+            var fb;
+            var fbURL = "https://www.facebook.com/andrew.oconnell.98";
+            var ai;
+            var aiURL = "https://aoconnell099.github.io/AIWaterworks/aiPlumbing/html/index.html";
+
+            var disc = BABYLON.MeshBuilder.CreateCylinder("disc", {height: 0.1, diameter: 1.6}, scene); 
+
+            scene.meshes.forEach((mesh) => {
+                mesh.position = new BABYLON.Vector3(mesh.position.x*0.1, mesh.position.y*0.1, mesh.position.z*0.05);
+                mesh.position.x += 3;
+                mesh.position.z -= 1;
+                mesh.renderingGroupId = 3;
+                switch (mesh.name) {
+                    case "github_logo":
+                        github = mesh;
+                        github.scaling = new BABYLON.Vector3(0.1,0.1,0.1);
+                        break;
+                    case "gmail_logo":
+                        gmail = mesh;
+                        gmail.scaling = new BABYLON.Vector3(0.1,1,0.1);
+                        break;
+                    case "resume_logo":
+                        resume = mesh;
+                        resume.scaling = new BABYLON.Vector3(0.2,1,0.2);
+                        break;
+                    case "deadpool_logo":
+                        deadpool = mesh;
+                        deadpool.scaling = new BABYLON.Vector3(0.1,1,0.1);
+                        break;
+                    case "facebook_logo":
+                        fb = mesh;
+                        fb.scaling = new BABYLON.Vector3(0.1,1,0.1);
+                        break;
+                    case "aiWaterworks":
+                        ai = mesh;
+                        ai.scaling = new BABYLON.Vector3(0.1,1,0.1);
+                        break;
+                }
+                mesh.actionManager = new BABYLON.ActionManager(scene);
+            });
+            //disc.position = github.position;
+            disc.position = new BABYLON.Vector3(2.975, 0, -1.5)
+            disc.rotation = github.rotation;
+            disc.visibility = 0;
+
+            //third-person camera
+            var camera = new BABYLON.ArcRotateCamera("camera1", -Math.PI/3, (Math.PI/2)-0.2, 8, new BABYLON.Vector3(0, 0, 0), scene); //y =8
+            camera.upperBetaLimit = Math.PI/2; // stops camera from going through the ground
+            
+            scene.activeCamera = camera;
+            scene.activeCamera.attachControl(canvas, true);
+
+            var isGithub = false;         
+            var isGmail = false;
+            var isResume = false;
+            var isDeadpool = false;
+            var isFacebook = false;
+            var isAI = false;
+            // Over/Out
+            var makeOverOut = function (mesh) {
+                mesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, function(){
+                    switch (mesh.name) {
+                    case "disc":
+                    case "github_logo":
+                        isGithub = false;
+                        break;
+                    case "gmail_logo":
+                        isGmail = false;
+                        break;
+                    case "resume_logo":
+                        isResume = false;
+                        break;
+                    case "deadpool_logo":
+                        isDeadpool = false;
+                        break;
+                    case "facebook_logo":
+                        isFacebook = false;
+                        break;
+                    case "aiWaterworks":
+                        isAI = false;
+                        break;
+                    }
+                }));
+                mesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, function(){
+                    switch (mesh.name) {
+                    case "disc":
+                    case "github_logo":
+                        isGithub = true;
+                        break;
+                    case "gmail_logo":
+                        isGmail = true;
+                        break;
+                    case "resume_logo":
+                        isResume = true;
+                        break;
+                    case "deadpool_logo":
+                        isDeadpool = true;
+                        break;
+                    case "facebook_logo":
+                        isFacebook = true;
+                        break;
+                    case "aiWaterworks":
+                        isAI = false;
+                        break;
+                    }
+                }));
+                if (mesh.name == "disc") {
+                    mesh.actionManager.registerAction(new BABYLON.InterpolateValueAction(BABYLON.ActionManager.OnPointerOutTrigger, github, "position", new BABYLON.Vector3(github.position.x, github.position.y, github.position.z), 150));
+                    mesh.actionManager.registerAction(new BABYLON.InterpolateValueAction(BABYLON.ActionManager.OnPointerOverTrigger, github, "position", new BABYLON.Vector3(github.position.x, github.position.y+0.1, github.position.z), 150));    
+                }
+                else {
+                    mesh.actionManager.registerAction(new BABYLON.InterpolateValueAction(BABYLON.ActionManager.OnPointerOutTrigger, mesh, "position", new BABYLON.Vector3(mesh.position.x, mesh.position.y, mesh.position.z), 150));
+                    mesh.actionManager.registerAction(new BABYLON.InterpolateValueAction(BABYLON.ActionManager.OnPointerOverTrigger, mesh, "position", new BABYLON.Vector3(mesh.position.x, mesh.position.y+0.1, mesh.position.z), 150));
+                }
+
+                mesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnLeftPickTrigger, function(){
+                    switch (mesh.name) {
+                    case "disc":
+                    case "github_logo":
+                        window.open(githubURL);
+                        break;
+                    case "gmail_logo":
+                        window.open(gmailURL);
+                        break;
+                    case "resume_logo":
+                        window.open(resumeURL);
+                        break;
+                    case "deadpool_logo":
+                        window.open(deadpoolURL);
+                    case "facebook_logo":
+                        window.open(fbURL);
+                        break;
+                    case "aiWaterworks":
+                        window.open(aiURL);
+                        break;
+                    }
+                }));
+            }
+
+            makeOverOut(github);
+            makeOverOut(disc);
+            makeOverOut(gmail);
+            makeOverOut(resume);
+            makeOverOut(deadpool);
+            makeOverOut(fb);
+            makeOverOut(ai);
+
+            var rotSpeed = 0.005;
+            var rotSpeedMultiplier = 3;
+            scene.onBeforeRenderObservable.add(()=>{
+                if(isGithub) {
+                    github.rotation.y += rotSpeed*rotSpeedMultiplier; 
+                }
+                else {
+                    github.rotation.y += rotSpeed;
+                }
+                disc.rotation = github.rotation;
+                if(isGmail) {
+                    gmail.rotation.y += rotSpeed*rotSpeedMultiplier; 
+                }
+                else {
+                    gmail.rotation.y += rotSpeed;
+                }
+                if(isResume) {
+                    resume.rotation.y += rotSpeed*rotSpeedMultiplier; 
+                }
+                else {
+                    resume.rotation.y += rotSpeed;
+                }
+                if(isDeadpool) {
+                    deadpool.rotation.y += rotSpeed*rotSpeedMultiplier; 
+                }
+                else {
+                    deadpool.rotation.y += rotSpeed;
+                }
+                if(isFacebook) {
+                    fb.rotation.y += rotSpeed*rotSpeedMultiplier; 
+                }
+                else {
+                    fb.rotation.y += rotSpeed;
+                }
+                if(isAI) {
+                    ai.rotation.y += rotSpeed*rotSpeedMultiplier; 
+                }
+                else {
+                    ai.rotation.y += rotSpeed;
+                }
+            });
+
+            var helper = scene.createDefaultEnvironment({
+                enableGroundMirror: true,
+                groundShadowLevel: 0.6,
+            });       
+            helper.setMainColor(BABYLON.Color3.Black());
+
+            BABYLON.ParticleHelper.BaseAssetsUrl = "./";
+
+            var myParticleSet = new BABYLON.ParticleHelper.CreateAsync("sunMed", scene).then(function(set) {
+                set.emitterNode.position = new BABYLON.Vector3(-4.5, 0.5, 3)
+                set.start();
+            });
+            myParticleSet.position = new BABYLON.Vector3(-10, 0, 30);
+
+            //  // GUI
+            var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("ui1");
+
+            var panel = new BABYLON.GUI.StackPanel();  
+            panel.width = "80px";
+            panel.height = "60px";
+            
+            panel.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+            panel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
+            advancedTexture.addControl(panel);
+
+            var playButton = BABYLON.GUI.Button.CreateImageOnlyButton(
+                "playBut",
+                "./Play.png"
+            );
+            playButton.width = "40px";
+            playButton.height = "40px";
+            panel.addControl(playButton);
+            var pauseButton = BABYLON.GUI.Button.CreateImageOnlyButton(
+                "pauseBut",
+                "./Pause.png"
+            );
+            pauseButton.width = "40px";
+            pauseButton.height = "40px";
+            pauseButton.isVisible = false;
+            panel.addControl(pauseButton);
+
+            var music = new BABYLON.Sound("Sunshine", "sunshine.mp3", scene, function() {
+                var audioEngine = new BABYLON.AudioEngine();
+                //audioEngine.unlock();
+                audioEngine.useCustomUnlockedButton = true;
+                console.log(audioEngine);
+                // Sound has been downloaded & decoded
+                playButton.onPointerUpObservable.add(function() {
+                    playButton.isVisible = false;
+                    pauseButton.isVisible = true;
+                    BABYLON.Engine.audioEngine.unlock();
+                    music.play();
+                });
+                pauseButton.onPointerUpObservable.add(function() {
+                    pauseButton.isVisible = false;
+                    playButton.isVisible = true;
+                    music.pause();
+                });
+                
+            });
+
+            engine.runRenderLoop(function() {
+                scene.render();
+            });
+
+            window.addEventListener("resize", function () {
+                engine.resize();
+            });
+        });
+    </script>
+</body>
+</html>
