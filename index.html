@@ -112,7 +112,7 @@
                         
                         <hr class="w-27 g-my-15" style="border: 1px solid grey;
                         border-radius: 5px;">
-                        <p class= "g-theme-color-gray-light-v2  g-font-size-14">
+                        <p class= "g-theme-color-gray-light-v2  g-font-size-14 ">
                                 Hello! Thanks for stopping by!  
                             <br>
                             <br> If you would like to get in  
@@ -204,6 +204,10 @@
             var camera = new BABYLON.ArcRotateCamera("camera1", -Math.PI/3, (Math.PI/2)-0.2, 8, new BABYLON.Vector3(0, 0, 0), scene); //y =8
             camera.upperBetaLimit = Math.PI/2; // stops camera from going through the ground
             
+            if ((typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1)){
+                camera.radius = 20;
+            }
+            console.log(camera.radius);
             scene.activeCamera = camera;
             scene.activeCamera.attachControl(canvas, true);
 
