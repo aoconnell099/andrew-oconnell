@@ -89,7 +89,7 @@
                 <figure class="u-shadow-v21 u-shadow-v21--hover g-bg-transparent g-rounded-4 text-center g-transition-0_3">
                     <div class="g-py-10 g-px-20">
                         <!-- Figure Image -->
-                        <img class="g-width-130 g-height-130 rounded-circle g-mb-30" src="./assets/img-temp/125x125/img14.png" alt="Image Description">
+                        <img class="g-width-130 g-height-130 rounded-circle g-mb-30" src="./pic.jpeg" alt="Close up picture of a face">
                         <!-- Figure Image -->
                 
                         <!-- Figure Info -->
@@ -138,7 +138,7 @@
         var canvas = document.getElementById("canvas");
         var engine = new BABYLON.Engine(canvas, true);
 
-        BABYLON.SceneLoader.Load("", "logosRotos.babylon", engine, function (scene) { 
+        BABYLON.SceneLoader.Load("", "logos.babylon", engine, function (scene) { 
             var gravityVector = new BABYLON.Vector3(0,-9.81, 0);
             var physicsPlugin = new BABYLON.CannonJSPlugin();
             scene.enablePhysics(gravityVector, physicsPlugin);
@@ -159,6 +159,8 @@
             var fbURL = "https://www.facebook.com/andrew.oconnell.98";
             var ai;
             var aiURL = "https://aoconnell099.github.io/AIWaterworks/aiPlumbing/html/index.html";
+            var char;
+            var charURL = "https://aoconnell099.github.io/game/dist/index.html";
 
             var disc = BABYLON.MeshBuilder.CreateCylinder("disc", {height: 0.1, diameter: 1.6}, scene); 
 
@@ -192,6 +194,10 @@
                         ai = mesh;
                         ai.scaling = new BABYLON.Vector3(0.1,1,0.1);
                         break;
+                    case "Character":
+                        char = mesh;
+                        char.scaling = new BABYLON.Vector3(1,1,0.4);
+                        break;
                 }
                 mesh.actionManager = new BABYLON.ActionManager(scene);
             });
@@ -209,7 +215,6 @@
             camera.angularSensibilityX = 1000;
             camera.angularSensibilityY = 1000;
             
-            console.log(camera.radius);
             scene.activeCamera = camera;
             scene.activeCamera.attachControl(canvas, true);
 
@@ -219,6 +224,7 @@
             var isDeadpool = false;
             var isFacebook = false;
             var isAI = false;
+            var isChar = false;
             // Over/Out
             var makeOverOut = function (mesh) {
                 mesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, function(){
@@ -242,6 +248,9 @@
                     case "aiWaterworks":
                         isAI = false;
                         break;
+                    case "Character":
+                        isChar = false;
+                        break;
                     }
                 }));
                 mesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, function(){
@@ -264,6 +273,9 @@
                         break;
                     case "aiWaterworks":
                         isAI = true;
+                        break;
+                    case "Character":
+                        isChar = true;
                         break;
                     }
                 }));
@@ -296,6 +308,9 @@
                     case "aiWaterworks":
                         window.open(aiURL);
                         break;
+                    case "Character":
+                        window.open(charURL);
+                        break;
                     }
                 }));
                 mesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickUpTrigger, function(){
@@ -318,6 +333,9 @@
                     case "aiWaterworks":
                         window.open(aiURL);
                         break;
+                    case "Character":
+                        window.open(charURL);
+                        break;
                     }
                 }));
             }
@@ -329,6 +347,7 @@
             makeOverOut(deadpool);
             makeOverOut(fb);
             makeOverOut(ai);
+            makeOverOut(char);
 
             var rotSpeed = 0.005;
             var rotSpeedMultiplier = 3;
@@ -369,6 +388,12 @@
                 }
                 else {
                     ai.rotation.y += rotSpeed;
+                }
+                if(isChar) {
+                    char.rotation.y += rotSpeed*rotSpeedMultiplier; 
+                }
+                else {
+                    char.rotation.y += rotSpeed;
                 }
             });
 
@@ -417,7 +442,6 @@
                 var audioEngine = new BABYLON.AudioEngine();
                 //audioEngine.unlock();
                 audioEngine.useCustomUnlockedButton = true;
-                console.log(audioEngine);
                 // Sound has been downloaded & decoded
                 playButton.onPointerUpObservable.add(function() {
                     playButton.isVisible = false;
@@ -432,6 +456,10 @@
                 });
                 
             });
+
+            // scene.debugLayer.show({
+            //     embedMode: true
+            // });
 
             engine.runRenderLoop(function() {
                 scene.render();
